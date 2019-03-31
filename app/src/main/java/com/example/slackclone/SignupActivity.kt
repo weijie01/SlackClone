@@ -1,23 +1,25 @@
 package com.example.slackclone
 
-import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 
-class LoginActivity : AppCompatActivity() {
+class SignupActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_login)
+        setContentView(R.layout.activity_signup)
     }
 
-    fun loginClicked(view: View) {
+    fun generateBackgroundColor(view: View) {
+
+    }
+
+    fun generateAvatar(view: View) {
 
     }
 
     fun signupClicked(view: View) {
-        val signupIntent = Intent(this, SignupActivity::class.java)
-        startActivity(signupIntent)
+
     }
 }
