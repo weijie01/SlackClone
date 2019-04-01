@@ -1,9 +1,10 @@
-package com.example.slackclone
+package com.example.slackclone.Controller
 
 import android.graphics.Color
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import com.example.slackclone.R
 import kotlinx.android.synthetic.main.activity_signup.*
 import java.util.*
 
