@@ -20,4 +20,12 @@ object UserDataService {
 
         return Color.rgb(colorR, colorG, colorB)
     }
+
+    fun clear() {
+        id = ""
+        name = ""
+        email = ""
+        avatarName = ""
+        avatarColor = ""
+    }
 }

@@ -19,6 +19,12 @@ object AuthService {
     var email = ""
     var authToken = ""
 
+    fun clear() {
+        isLoggedIn = false
+        email = ""
+        authToken = ""
+    }
+
     fun registerUser(context: Context, email: String, password: String, complete: (Boolean) -> Unit) {
 
         val jsonBody = JSONObject()
