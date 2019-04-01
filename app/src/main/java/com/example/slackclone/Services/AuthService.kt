@@ -105,6 +105,7 @@ object AuthService {
                 UserDataService.email = response.getString("email")
                 UserDataService.avatarName = response.getString("avatarName")
                 UserDataService.avatarColor = response.getString("avatarColor")
+                complete(true)
 
             } catch(e: JSONException) {
 

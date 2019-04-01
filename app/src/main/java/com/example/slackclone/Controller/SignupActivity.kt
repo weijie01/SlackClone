@@ -59,8 +59,8 @@ class SignupActivity : AppCompatActivity() {
             if (registerSuccess) {
                 AuthService.loginUser(this, email, password) { loginSuccess ->
                     if (loginSuccess) {
-                        AuthService.createUser(this, name, email, avatarName, avatarColor) { createSucces ->
-                            if (createSucces) {
+                        AuthService.createUser(this, name, email, avatarName, avatarColor) { createSuccess ->
+                            if (createSuccess) {
                                 finish()
                             }
                         }
