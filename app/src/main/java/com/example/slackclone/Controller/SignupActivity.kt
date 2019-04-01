@@ -11,8 +11,8 @@ import java.util.*
 
 class SignupActivity : AppCompatActivity() {
 
-    var userAvatar = "profiledefault"
-    var avatarBackgroundColor = "[0.5, 0.5, 0.5, 1]"
+    var avatarName = "profiledefault"
+    var avatarColor = "[0.5, 0.5, 0.5, 1]"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,17 +21,17 @@ class SignupActivity : AppCompatActivity() {
 
     fun generateAvatar(view: View) {
         val random = Random()
-        val color = random.nextInt(2)
-        val avatar = random.nextInt(28)
+        val avatarGroup = random.nextInt(2)
+        val avatarIndex = random.nextInt(28)
 
-        if (color == 0) {
-            userAvatar = "dark$avatar"
+        if (avatarGroup == 0) {
+            avatarName = "dark$avatarIndex"
         }
         else {
-            userAvatar = "light$avatar"
+            avatarName = "light$avatarIndex"
         }
 
-        val resourceId = resources.getIdentifier(userAvatar, "drawable", packageName)
+        val resourceId = resources.getIdentifier(avatarName, "drawable", packageName)
         generateAvatarButton.setImageResource(resourceId)
     }
 
@@ -47,10 +47,11 @@ class SignupActivity : AppCompatActivity() {
         val savedG = colorG.toDouble() / 255
         val savedB = colorB.toDouble() / 255
 
-        avatarBackgroundColor = "[$savedR, $savedG, $savedB, 1]"
+        avatarColor = "[$savedR, $savedG, $savedB, 1]"
     }
 
     fun signupClicked(view: View) {
+        val name = usernameText.text.toString()
         val email = emailText.text.toString()
         val password = passwordText.text.toString()
 
@@ -58,7 +59,11 @@ class SignupActivity : AppCompatActivity() {
             if (registerSuccess) {
                 AuthService.loginUser(this, email, password) { loginSuccess ->
                     if (loginSuccess) {
-                        println(AuthService.authToken)
+                        AuthService.createUser(this, name, email, avatarName, avatarColor) { createSucces ->
+                            if (createSucces) {
+                                finish()
+                            }
+                        }
                     }
                 }
             }
