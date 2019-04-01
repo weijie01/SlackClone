@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import com.example.slackclone.R
+import com.example.slackclone.Services.AuthService
 import kotlinx.android.synthetic.main.activity_signup.*
 import java.util.*
 
@@ -50,6 +51,13 @@ class SignupActivity : AppCompatActivity() {
     }
 
     fun signupClicked(view: View) {
+        val email = emailText.text.toString()
+        val password = passwordText.text.toString()
 
+        AuthService.registerUser(this, email, password) {complete ->
+            if (complete) {
+                println(complete)
+            }
+        }
     }
 }
