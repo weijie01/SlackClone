@@ -4,6 +4,7 @@ import android.graphics.Color
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import com.example.slackclone.R
 import com.example.slackclone.Services.AuthService
 import kotlinx.android.synthetic.main.activity_signup.*
@@ -17,6 +18,8 @@ class SignupActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_signup)
+
+        setSendingRequestStatus(false)
     }
 
     fun generateAvatar(view: View) {
@@ -55,6 +58,13 @@ class SignupActivity : AppCompatActivity() {
         val email = emailText.text.toString()
         val password = passwordText.text.toString()
 
+        if (name.isEmpty() || email.isEmpty() || password.isEmpty()) {
+            Toast.makeText(this, "Make sure you have filled in each field.", Toast.LENGTH_LONG).show()
+            return
+        }
+
+        setSendingRequestStatus(true)
+
         AuthService.registerUser(this, email, password) { registerSuccess ->
             if (registerSuccess) {
                 AuthService.loginUser(this, email, password) { loginSuccess ->
@@ -63,10 +73,37 @@ class SignupActivity : AppCompatActivity() {
                             if (createSuccess) {
                                 finish()
                             }
+                            else {
+                                Toast.makeText(this, "Fail to sign up. Please try again.", Toast.LENGTH_LONG).show()
+                                setSendingRequestStatus(false)
+                            }
                         }
+                    }
+                    else {
+                        Toast.makeText(this, "Fail to sign up. Please try again.", Toast.LENGTH_LONG).show()
+                        setSendingRequestStatus(false)
                     }
                 }
             }
+            else {
+                Toast.makeText(this, "Fail to sign up. Please try again.", Toast.LENGTH_LONG).show()
+                setSendingRequestStatus(false)
+            }
+        }
+    }
+
+    fun setSendingRequestStatus(isSending: Boolean) {
+        if (isSending) {
+            progressBar.visibility = View.VISIBLE
+            generateAvatarButton.isEnabled = false
+            generateBackgroundColorButton.isEnabled = false
+            signupButton.isEnabled = false
+        }
+        else {
+            progressBar.visibility = View.INVISIBLE
+            generateAvatarButton.isEnabled = true
+            generateBackgroundColorButton.isEnabled = true
+            signupButton.isEnabled = true
         }
     }
 }

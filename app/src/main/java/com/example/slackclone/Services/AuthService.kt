@@ -27,7 +27,6 @@ object AuthService {
 
         val registerRequest = object: StringRequest(Method.POST, URL_REGISTER, Response.Listener{response ->
 
-            println(response)
             complete(true)
 
         }, Response.ErrorListener {error ->
