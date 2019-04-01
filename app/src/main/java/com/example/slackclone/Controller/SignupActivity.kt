@@ -54,9 +54,13 @@ class SignupActivity : AppCompatActivity() {
         val email = emailText.text.toString()
         val password = passwordText.text.toString()
 
-        AuthService.registerUser(this, email, password) {complete ->
-            if (complete) {
-                println(complete)
+        AuthService.registerUser(this, email, password) { registerSuccess ->
+            if (registerSuccess) {
+                AuthService.loginUser(this, email, password) { loginSuccess ->
+                    if (loginSuccess) {
+                        println(AuthService.authToken)
+                    }
+                }
             }
         }
     }
