@@ -1,12 +1,15 @@
 package com.example.slackclone.Controller
 
+import android.content.Intent
 import android.graphics.Color
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v4.content.LocalBroadcastManager
 import android.view.View
 import android.widget.Toast
 import com.example.slackclone.R
 import com.example.slackclone.Services.AuthService
+import com.example.slackclone.Utilities.BROADCAST_USER_DATA_CHANGE
 import kotlinx.android.synthetic.main.activity_signup.*
 import java.util.*
 
@@ -71,6 +74,10 @@ class SignupActivity : AppCompatActivity() {
                     if (loginSuccess) {
                         AuthService.createUser(this, name, email, avatarName, avatarColor) { createSuccess ->
                             if (createSuccess) {
+
+                                val userDataChange = Intent(BROADCAST_USER_DATA_CHANGE)
+                                LocalBroadcastManager.getInstance(this).sendBroadcast(userDataChange)
+
                                 finish()
                             }
                             else {
