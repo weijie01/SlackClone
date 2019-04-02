@@ -47,8 +47,11 @@ class MainActivity : AppCompatActivity() {
             if (UserDataService.avatarName != "profiledefault") {
                 val resourceId = resources.getIdentifier(UserDataService.avatarName, "drawable", packageName)
                 userImageNavHeader.setImageResource(resourceId)
+            }
+            if (UserDataService.avatarColor != "") {
                 userImageNavHeader.setBackgroundColor(UserDataService.getAvatarColor(UserDataService.avatarColor))
             }
+
 
             loginButtonNavHeader.text = "Logout"
         }

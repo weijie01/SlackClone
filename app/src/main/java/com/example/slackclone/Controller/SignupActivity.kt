@@ -1,22 +1,19 @@
 package com.example.slackclone.Controller
 
-import android.content.Intent
 import android.graphics.Color
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.support.v4.content.LocalBroadcastManager
 import android.view.View
 import android.widget.Toast
 import com.example.slackclone.R
 import com.example.slackclone.Services.AuthService
-import com.example.slackclone.Utilities.BROADCAST_USER_DATA_CHANGE
 import kotlinx.android.synthetic.main.activity_signup.*
 import java.util.*
 
 class SignupActivity : AppCompatActivity() {
 
     var avatarName = "profiledefault"
-    var avatarColor = "[0.5, 0.5, 0.5, 1]"
+    var avatarColor = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,9 +54,9 @@ class SignupActivity : AppCompatActivity() {
     }
 
     fun signupClicked(view: View) {
-        val name = usernameText.text.toString()
-        val email = emailText.text.toString()
-        val password = passwordText.text.toString()
+        val name = usernameTextSignup.text.toString()
+        val email = emailTextSignup.text.toString()
+        val password = passwordTextSignup.text.toString()
 
         if (name.isEmpty() || email.isEmpty() || password.isEmpty()) {
             Toast.makeText(this, "Make sure you have filled in each field.", Toast.LENGTH_LONG).show()
@@ -74,10 +71,6 @@ class SignupActivity : AppCompatActivity() {
                     if (loginSuccess) {
                         AuthService.createUser(this, name, email, avatarName, avatarColor) { createSuccess ->
                             if (createSuccess) {
-
-                                val userDataChange = Intent(BROADCAST_USER_DATA_CHANGE)
-                                LocalBroadcastManager.getInstance(this).sendBroadcast(userDataChange)
-
                                 finish()
                             }
                             else {
@@ -101,16 +94,16 @@ class SignupActivity : AppCompatActivity() {
 
     fun setSendingRequestStatus(isSending: Boolean) {
         if (isSending) {
-            progressBar.visibility = View.VISIBLE
+            progressBarSignup.visibility = View.VISIBLE
             generateAvatarButton.isEnabled = false
             generateBackgroundColorButton.isEnabled = false
-            signupButton.isEnabled = false
+            signupButtonSignup.isEnabled = false
         }
         else {
-            progressBar.visibility = View.INVISIBLE
+            progressBarSignup.visibility = View.INVISIBLE
             generateAvatarButton.isEnabled = true
             generateBackgroundColorButton.isEnabled = true
-            signupButton.isEnabled = true
+            signupButtonSignup.isEnabled = true
         }
     }
 }
