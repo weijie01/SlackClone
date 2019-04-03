@@ -71,6 +71,7 @@ class SignupActivity : AppCompatActivity() {
                     if (loginSuccess) {
                         AuthService.createUser(this, name, email, avatarName, avatarColor) { createSuccess ->
                             if (createSuccess) {
+                                setSendingRequestStatus(false)
                                 finish()
                             }
                             else {

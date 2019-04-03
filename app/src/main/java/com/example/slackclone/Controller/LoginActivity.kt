@@ -32,6 +32,7 @@ class LoginActivity : AppCompatActivity() {
             if (loginSuccess) {
                 AuthService.findUser(this, email) {findSuccess ->
                     if (findSuccess) {
+                        setSendingRequestStatus(false)
                         finish()
                     }
                     else {

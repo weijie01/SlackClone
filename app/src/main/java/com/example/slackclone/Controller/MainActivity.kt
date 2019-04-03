@@ -9,8 +9,11 @@ import android.os.Bundle
 import android.support.v4.content.LocalBroadcastManager
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
+import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.view.View
+import android.widget.EditText
+import android.widget.TextView
 import com.example.slackclone.R
 import com.example.slackclone.Services.AuthService
 import com.example.slackclone.Services.UserDataService
@@ -66,7 +69,21 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun addChannelClicked(view: View) {
+        if (AuthService.isLoggedIn) {
+            val dialogView = layoutInflater.inflate(R.layout.add_channel_dialog, null)
+            val builder = AlertDialog.Builder(this)
+            builder.setView(dialogView)
+                .setPositiveButton("Add") { dialogInterface, i ->
+                    val addChannelNameText = dialogView.findViewById<EditText>(R.id.addChannelNameText)
+                    val addChannelDescText = dialogView.findViewById<EditText>(R.id.addChannelDescText)
+                    val channelName = addChannelNameText.text.toString()
+                    val channelDesc = addChannelDescText.text.toString()
+                }
+                .setNegativeButton("Cancel") { dialogInterface, i ->
 
+                }
+                .show()
+        }
     }
 
     fun loginClicked(view: View) {
