@@ -52,6 +52,10 @@ class MainActivity : AppCompatActivity() {
 
         channelsAdapter = ArrayAdapter<Channel>(this, android.R.layout.simple_list_item_1, MessageService.channels)
         channel_list.adapter = channelsAdapter
+
+        if (App.prefs.isLoggedIn) {
+            AuthService.findUser(this, App.prefs.email) {}
+        }
     }
 
     private val onNewChannel = Emitter.Listener { args ->
@@ -106,7 +110,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun addChannelClicked(view: View) {
-        if (AuthService.isLoggedIn) {
+        if (App.prefs.isLoggedIn) {
             val dialogView = layoutInflater.inflate(R.layout.add_channel_dialog, null)
             val builder = AlertDialog.Builder(this)
             builder.setView(dialogView)
@@ -126,7 +130,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun loginClicked(view: View) {
-        if (AuthService.isLoggedIn) {
+        if (App.prefs.isLoggedIn) {
 
             AuthService.clear()
             UserDataService.clear()

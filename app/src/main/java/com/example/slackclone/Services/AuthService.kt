@@ -7,6 +7,7 @@ import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
+import com.example.slackclone.Controller.App
 import com.example.slackclone.Utilities.URL_CREATE_USER
 import com.example.slackclone.Utilities.URL_FIND_USER
 import com.example.slackclone.Utilities.URL_LOGIN
@@ -16,14 +17,14 @@ import org.json.JSONObject
 
 object AuthService {
 
-    var isLoggedIn = false
-    var email = ""
-    var authToken = ""
+//    var isLoggedIn = false
+//    var email = ""
+//    var authToken = ""
 
     fun clear() {
-        isLoggedIn = false
-        email = ""
-        authToken = ""
+        App.prefs.isLoggedIn = false
+        App.prefs.email = ""
+        App.prefs.authToken = ""
     }
 
     fun registerUser(context: Context, email: String, password: String, complete: (Boolean) -> Unit) {
@@ -64,9 +65,9 @@ object AuthService {
 
             try {
 
-                isLoggedIn = true
-                this.email = response.getString("user")
-                authToken = response.getString("token")
+                App.prefs.isLoggedIn = true
+                App.prefs.email = response.getString("user")
+                App.prefs.authToken = response.getString("token")
                 complete(true)
 
             } catch(e: JSONException) {
@@ -134,7 +135,7 @@ object AuthService {
 
             override fun getHeaders(): MutableMap<String, String> {
                 val headers = HashMap<String, String>()
-                headers.put("Authorization", "Bearer $authToken")
+                headers.put("Authorization", "Bearer ${App.prefs.authToken}")
                 return headers
             }
         }
@@ -167,7 +168,7 @@ object AuthService {
         }) {
             override fun getHeaders(): MutableMap<String, String> {
                 val headers = HashMap<String, String>()
-                headers.put("Authorization", "Bearer $authToken")
+                headers.put("Authorization", "Bearer ${App.prefs.authToken}")
                 return headers
             }
         }
