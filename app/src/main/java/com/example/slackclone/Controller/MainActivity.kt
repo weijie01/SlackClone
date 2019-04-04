@@ -14,6 +14,7 @@ import android.widget.ArrayAdapter
 import android.widget.EditText
 import android.widget.TextView
 import com.example.slackclone.Model.Channel
+import com.example.slackclone.Model.Message
 import com.example.slackclone.R
 import com.example.slackclone.Services.AuthService
 import com.example.slackclone.Services.MessageService
@@ -51,6 +52,7 @@ class MainActivity : AppCompatActivity() {
 
         socket.connect()
         socket.on("channelCreated", onNewChannel)
+        socket.on("messageCreated", onNewMessage)
 
         channelsAdapter = ArrayAdapter<Channel>(this, android.R.layout.simple_list_item_1, MessageService.channels)
         channel_list.adapter = channelsAdapter
@@ -75,6 +77,25 @@ class MainActivity : AppCompatActivity() {
             val newChannel = Channel(channelName, channelDesc, channelId)
             MessageService.channels.add(newChannel)
             channelsAdapter.notifyDataSetChanged()
+        }
+    }
+
+    private val onNewMessage = Emitter.Listener { args ->
+        runOnUiThread {
+            val messageBody = args[0] as String
+            val userId = args[1] as String
+            val channelId = args[2] as String
+            val userName = args[3] as String
+            val userAvatar = args[4] as String
+            val userAvatarColor = args[5] as String
+            val messageId = args[6] as String
+            val timeStamp = args[7] as String
+
+            val newMessage = Message(messageBody, userId, channelId, userName, userAvatar, userAvatarColor, messageId, timeStamp)
+            MessageService.messages.add(newMessage)
+
+            println(newMessage.messageBody)
+            //adapter notify change
         }
     }
 
@@ -115,7 +136,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun updateWithChannel() {
-        selectedChannelName.text = selectedChannel?.name
+        selectedChannelName.text = "#${selectedChannel?.name}"
 
         //download messages of the selected channel
     }
@@ -168,8 +189,22 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun sendMessage(view: View) {
-
         hideKeyBoard()
+
+        if (!App.prefs.isLoggedIn || messageText.text.isEmpty() || selectedChannel == null) {
+            return
+        }
+
+        val messageBody = messageText.text.toString()
+        val userId = UserDataService.id
+        val channelId = selectedChannel!!.id
+        val userName = UserDataService.name
+        val userAvatar = UserDataService.avatarName
+        val userAvatarColor = UserDataService.avatarColor
+
+        socket.emit("newMessage", messageBody, userId, channelId, userName, userAvatar, userAvatarColor)
+
+        messageText.text.clear()
     }
 
     fun hideKeyBoard() {

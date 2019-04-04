@@ -7,12 +7,14 @@ import com.android.volley.toolbox.JsonArrayRequest
 import com.android.volley.toolbox.Volley
 import com.example.slackclone.Controller.App
 import com.example.slackclone.Model.Channel
+import com.example.slackclone.Model.Message
 import com.example.slackclone.Utilities.URL_GET_CHANNELS
 import org.json.JSONException
 
 object MessageService {
 
     val channels = ArrayList<Channel>()
+    val messages = ArrayList<Message>()
 
     fun getChannels(context: Context, complete: (Boolean) -> Unit) {
         val channelsRequest = object: JsonArrayRequest(Method.GET, URL_GET_CHANNELS, null, Response.Listener { response ->
