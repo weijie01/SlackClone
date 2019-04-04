@@ -17,10 +17,6 @@ import org.json.JSONObject
 
 object AuthService {
 
-//    var isLoggedIn = false
-//    var email = ""
-//    var authToken = ""
-
     fun clear() {
         App.prefs.isLoggedIn = false
         App.prefs.email = ""
@@ -52,7 +48,7 @@ object AuthService {
             }
         }
 
-        Volley.newRequestQueue(context).add(registerRequest)
+        App.prefs.requestQueue.add(registerRequest)
     }
 
     fun loginUser(context: Context, email: String, password: String, complete: (Boolean) -> Unit) {
@@ -92,7 +88,7 @@ object AuthService {
             }
         }
 
-        Volley.newRequestQueue(context).add(loginRequest)
+        App.prefs.requestQueue.add(loginRequest)
     }
 
     fun createUser(context: Context, name: String, email: String, avatarName: String, avatarColor: String, complete: (Boolean) -> Unit) {
@@ -140,7 +136,7 @@ object AuthService {
             }
         }
 
-        Volley.newRequestQueue(context).add(createRequest)
+        App.prefs.requestQueue.add(createRequest)
     }
 
     fun findUser(context: Context, email: String, complete: (Boolean) -> Unit) {
@@ -173,6 +169,6 @@ object AuthService {
             }
         }
 
-        Volley.newRequestQueue(context).add(findRequest)
+        App.prefs.requestQueue.add(findRequest)
     }
 }

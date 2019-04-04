@@ -1,6 +1,7 @@
 package com.example.slackclone.Utilities
 
 import android.content.Context
+import com.android.volley.toolbox.Volley
 
 class SharedPref(context: Context) {
 
@@ -22,4 +23,6 @@ class SharedPref(context: Context) {
     var authToken: String
         get() = prefs.getString(AUTH_TOKEN, "")
         set(value) = prefs.edit().putString(AUTH_TOKEN, value).apply()
+
+    val requestQueue = Volley.newRequestQueue(context)
 }

@@ -48,6 +48,6 @@ object MessageService {
             }
         }
 
-        Volley.newRequestQueue(context).add(channelsRequest)
+        App.prefs.requestQueue.add(channelsRequest)
     }
 }
