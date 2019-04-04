@@ -10,6 +10,7 @@ import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import android.widget.ArrayAdapter
 import android.widget.EditText
 import android.widget.TextView
 import com.example.slackclone.Model.Channel
@@ -28,6 +29,7 @@ import kotlinx.android.synthetic.main.nav_header_main.*
 class MainActivity : AppCompatActivity() {
 
     val socket = IO.socket(SOCKET_URL)
+    lateinit var channelsAdapter : ArrayAdapter<Channel>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,6 +49,9 @@ class MainActivity : AppCompatActivity() {
 
         socket.connect()
         socket.on("channelCreated", onNewChannel)
+
+        channelsAdapter = ArrayAdapter<Channel>(this, android.R.layout.simple_list_item_1, MessageService.channels)
+        channel_list.adapter = channelsAdapter
     }
 
     private val onNewChannel = Emitter.Listener { args ->
@@ -57,8 +62,7 @@ class MainActivity : AppCompatActivity() {
 
             val newChannel = Channel(channelName, channelDesc, channelId)
             MessageService.channels.add(newChannel)
-
-            println(newChannel.name)
+            channelsAdapter.notifyDataSetChanged()
         }
     }
 
@@ -69,7 +73,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private val userDataChangeReceiver = object: BroadcastReceiver() {
-        override fun onReceive(context: Context?, intent: Intent?) {
+        override fun onReceive(context: Context, intent: Intent?) {
 
             userNameNavHeader.text = UserDataService.name
             userEmailNavHeader.text = UserDataService.email
@@ -84,6 +88,12 @@ class MainActivity : AppCompatActivity() {
 
 
             loginButtonNavHeader.text = "Logout"
+
+            MessageService.getChannels(context) { getChannelsSuccess ->
+                if (getChannelsSuccess) {
+                    channelsAdapter.notifyDataSetChanged()
+                }
+            }
         }
     }
 
