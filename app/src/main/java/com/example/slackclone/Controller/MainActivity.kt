@@ -24,12 +24,14 @@ import io.socket.client.IO
 import io.socket.emitter.Emitter
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
+import kotlinx.android.synthetic.main.content_main.*
 import kotlinx.android.synthetic.main.nav_header_main.*
 
 class MainActivity : AppCompatActivity() {
 
     val socket = IO.socket(SOCKET_URL)
     lateinit var channelsAdapter : ArrayAdapter<Channel>
+    var selectedChannel : Channel? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,6 +54,12 @@ class MainActivity : AppCompatActivity() {
 
         channelsAdapter = ArrayAdapter<Channel>(this, android.R.layout.simple_list_item_1, MessageService.channels)
         channel_list.adapter = channelsAdapter
+
+        channel_list.setOnItemClickListener { adapterView, view, i, l ->
+            selectedChannel = MessageService.channels[i]
+            updateWithChannel()
+            drawer_layout.closeDrawer(GravityCompat.START)
+        }
 
         if (App.prefs.isLoggedIn) {
             AuthService.findUser(this, App.prefs.email) {}
@@ -96,9 +104,20 @@ class MainActivity : AppCompatActivity() {
             MessageService.getChannels(context) { getChannelsSuccess ->
                 if (getChannelsSuccess) {
                     channelsAdapter.notifyDataSetChanged()
+
+                    if (MessageService.channels.count() > 0) {
+                        selectedChannel = MessageService.channels[0]
+                        updateWithChannel()
+                    }
                 }
             }
         }
+    }
+
+    fun updateWithChannel() {
+        selectedChannelName.text = selectedChannel?.name
+
+        //download messages of the selected channel
     }
 
     override fun onBackPressed() {
