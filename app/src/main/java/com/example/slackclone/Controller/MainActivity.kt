@@ -16,11 +16,15 @@ import com.example.slackclone.R
 import com.example.slackclone.Services.AuthService
 import com.example.slackclone.Services.UserDataService
 import com.example.slackclone.Utilities.BROADCAST_USER_DATA_CHANGE
+import com.example.slackclone.Utilities.SOCKET_URL
+import io.socket.client.IO
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.nav_header_main.*
 
 class MainActivity : AppCompatActivity() {
+
+    val socket = IO.socket(SOCKET_URL)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,6 +41,8 @@ class MainActivity : AppCompatActivity() {
 
         LocalBroadcastManager.getInstance(this).registerReceiver(userDataChangeReceiver, IntentFilter(
             BROADCAST_USER_DATA_CHANGE))
+
+        socket.connect()
     }
 
     private val userDataChangeReceiver = object: BroadcastReceiver() {
@@ -76,6 +82,8 @@ class MainActivity : AppCompatActivity() {
                     val addChannelDescText = dialogView.findViewById<EditText>(R.id.addChannelDescText)
                     val channelName = addChannelNameText.text.toString()
                     val channelDesc = addChannelDescText.text.toString()
+
+                    socket.emit("newChannel", channelName, channelDesc)
                 }
                 .setNegativeButton("Cancel") { dialogInterface, i ->
 
