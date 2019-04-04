@@ -12,12 +12,15 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.TextView
+import com.example.slackclone.Model.Channel
 import com.example.slackclone.R
 import com.example.slackclone.Services.AuthService
+import com.example.slackclone.Services.MessageService
 import com.example.slackclone.Services.UserDataService
 import com.example.slackclone.Utilities.BROADCAST_USER_DATA_CHANGE
 import com.example.slackclone.Utilities.SOCKET_URL
 import io.socket.client.IO
+import io.socket.emitter.Emitter
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.nav_header_main.*
@@ -43,6 +46,26 @@ class MainActivity : AppCompatActivity() {
             BROADCAST_USER_DATA_CHANGE))
 
         socket.connect()
+        socket.on("channelCreated", onNewChannel)
+    }
+
+    private val onNewChannel = Emitter.Listener { args ->
+        runOnUiThread {
+            val channelName = args[0] as String
+            val channelDesc = args[1] as String
+            val channelId = args[2] as String
+
+            val newChannel = Channel(channelName, channelDesc, channelId)
+            MessageService.channels.add(newChannel)
+
+            println(newChannel.name)
+        }
+    }
+
+    override fun onDestroy() {
+        socket.disconnect()
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(userDataChangeReceiver)
+        super.onDestroy()
     }
 
     private val userDataChangeReceiver = object: BroadcastReceiver() {
