@@ -108,6 +108,7 @@ class MainActivity : AppCompatActivity() {
 
                     //adapter notify change
                     messagesAdapter.notifyDataSetChanged()
+                    messageList.smoothScrollToPosition(MessageService.messages.count() - 1)
                 }
             }
         }
@@ -163,6 +164,7 @@ class MainActivity : AppCompatActivity() {
                     }
 
                     messagesAdapter.notifyDataSetChanged()
+                    messageList.smoothScrollToPosition(MessageService.messages.count() - 1)
                 }
             }
         }
