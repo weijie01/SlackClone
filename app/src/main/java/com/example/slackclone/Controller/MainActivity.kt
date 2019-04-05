@@ -143,28 +143,32 @@ class MainActivity : AppCompatActivity() {
 
                     if (MessageService.channels.count() > 0) {
                         selectedChannel = MessageService.channels[0]
-                        updateWithChannel()
                     }
+                    updateWithChannel()
                 }
             }
         }
     }
 
     fun updateWithChannel() {
-        selectedChannelName.text = "#${selectedChannel?.name}"
+        if (selectedChannel != null) {
+            selectedChannelName.text = "#${selectedChannel?.name}"
+        }
+        else {
+            selectedChannelName.text = "No channel yet"
+        }
+
 
         //download messages of the selected channel
         if (selectedChannel != null) {
             MessageService.getMessages(this, selectedChannel!!.id) { getMessagesSuccess ->
                 if (getMessagesSuccess) {
 
-                    //DEBUG: print each message
-                    for (message in MessageService.messages) {
-                        println(message.messageBody)
-                    }
-
                     messagesAdapter.notifyDataSetChanged()
-                    messageList.smoothScrollToPosition(MessageService.messages.count() - 1)
+
+                    if (MessageService.messages.count() > 0) {
+                        messageList.smoothScrollToPosition(MessageService.messages.count() - 1)
+                    }
                 }
             }
         }
