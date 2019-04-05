@@ -108,7 +108,7 @@ class MainActivity : AppCompatActivity() {
 
                     //adapter notify change
                     messagesAdapter.notifyDataSetChanged()
-                    messageList.smoothScrollToPosition(MessageService.messages.count() - 1)
+                    messageList.smoothScrollToPosition(messagesAdapter.itemCount - 1)
                 }
             }
         }
@@ -166,8 +166,8 @@ class MainActivity : AppCompatActivity() {
 
                     messagesAdapter.notifyDataSetChanged()
 
-                    if (MessageService.messages.count() > 0) {
-                        messageList.smoothScrollToPosition(MessageService.messages.count() - 1)
+                    if (messagesAdapter.itemCount > 0) {
+                        messageList.smoothScrollToPosition(messagesAdapter.itemCount - 1)
                     }
                 }
             }
@@ -208,6 +208,10 @@ class MainActivity : AppCompatActivity() {
             AuthService.clear()
             UserDataService.clear()
             MessageService.clear()
+
+            messagesAdapter.notifyDataSetChanged()
+            selectedChannelName.text = "Please Log In"
+            selectedChannel = null
 
             userNameNavHeader.text = ""
             userEmailNavHeader.text = ""
