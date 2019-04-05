@@ -8,11 +8,13 @@ import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.LinearLayoutManager
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
 import android.widget.EditText
 import android.widget.TextView
+import com.example.slackclone.Adapters.MessagesAdapter
 import com.example.slackclone.Model.Channel
 import com.example.slackclone.Model.Message
 import com.example.slackclone.R
@@ -32,6 +34,7 @@ class MainActivity : AppCompatActivity() {
 
     val socket = IO.socket(SOCKET_URL)
     lateinit var channelsAdapter : ArrayAdapter<Channel>
+    lateinit var messagesAdapter : MessagesAdapter
     var selectedChannel : Channel? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -62,6 +65,10 @@ class MainActivity : AppCompatActivity() {
             updateWithChannel()
             drawer_layout.closeDrawer(GravityCompat.START)
         }
+
+        messagesAdapter = MessagesAdapter(this, MessageService.messages)
+        messageList.adapter = messagesAdapter
+        messageList.layoutManager = LinearLayoutManager(this)
 
         if (App.prefs.isLoggedIn) {
             AuthService.findUser(this, App.prefs.email) {}
@@ -100,6 +107,7 @@ class MainActivity : AppCompatActivity() {
                     MessageService.messages.add(newMessage)
 
                     //adapter notify change
+                    messagesAdapter.notifyDataSetChanged()
                 }
             }
         }
@@ -153,6 +161,8 @@ class MainActivity : AppCompatActivity() {
                     for (message in MessageService.messages) {
                         println(message.messageBody)
                     }
+
+                    messagesAdapter.notifyDataSetChanged()
                 }
             }
         }
