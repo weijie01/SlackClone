@@ -209,6 +209,7 @@ class MainActivity : AppCompatActivity() {
             UserDataService.clear()
             MessageService.clear()
 
+            channelsAdapter.notifyDataSetChanged()
             messagesAdapter.notifyDataSetChanged()
             selectedChannelName.text = "Please Log In"
             selectedChannel = null
